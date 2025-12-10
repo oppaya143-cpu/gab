@@ -1,0 +1,162 @@
+{
+  "778134914868051988": {
+    "model": "Riley Mae Lewis (VIP)",
+    "shift": "afternoon",
+    "lastClockIn": {
+      "time": "2025-04-27T15:47:25.773Z",
+      "shift": "afternoon"
+    },
+    "lastClockOut": {
+      "time": "2025-04-28T00:03:22.132Z",
+      "shift": "afternoon"
+    },
+    "breakStart": 1745773839455,
+    "onBreak": false,
+    "totalBreak": 15
+  },
+  "934137503554887740": {
+    "model": "Emmi, pixie",
+    "shift": "afternoon",
+    "lastClockIn": {
+      "time": "2025-04-27T18:05:52.974Z",
+      "shift": "afternoon"
+    },
+    "lastClockOut": {
+      "time": "2025-04-27T18:06:11.984Z",
+      "shift": "afternoon"
+    },
+    "breakStart": 1745777183672,
+    "onBreak": false,
+    "totalBreak": 0
+  },
+  "1279759094516813854": {
+    "model": "Pixie/Emmi/Carly/Maile",
+    "shift": "morning",
+    "breakStart": 1745679156468,
+    "onBreak": true,
+    "lastClockIn": {
+      "time": "2025-04-28T07:56:48.690Z",
+      "shift": "morning"
+    },
+    "lastClockOut": {
+      "time": "2025-04-27T16:01:46.168Z",
+      "shift": "morning"
+    }
+  },
+  "1365501369498206310": {
+    "model": "Gena",
+    "shift": "afternoon",
+    "lastClockIn": {
+      "time": "2025-04-27T15:56:01.611Z",
+      "shift": "afternoon"
+    },
+    "breakStart": 1745774178129,
+    "onBreak": false,
+    "totalBreak": 26,
+    "lastClockOut": {
+      "time": "2025-04-28T00:00:22.590Z",
+      "shift": "afternoon"
+    }
+  },
+  "1361286428415496302": {
+    "model": "Jordan",
+    "shift": "peak",
+    "lastClockIn": {
+      "time": "2025-04-27T23:52:34.881Z",
+      "shift": "peak"
+    },
+    "breakStart": 1745818906165,
+    "onBreak": false,
+    "totalBreak": 20,
+    "lastClockOut": {
+      "time": "2025-04-28T08:00:18.557Z",
+      "shift": "peak"
+    }
+  },
+  "454237661167616020": {
+    "model": "Jordan",
+    "shift": "peak",
+    "lastClockIn": {
+      "time": "2025-04-27T16:00:04.515Z",
+      "shift": "peak"
+    },
+    "breakStart": 1745778377045,
+    "onBreak": false,
+    "totalBreak": 14,
+    "lastClockOut": {
+      "time": "2025-04-28T00:00:20.092Z",
+      "shift": "peak"
+    }
+  },
+  "1362217037161824266": {
+    "model": "Carly, Emmi, Maile, Pixie",
+    "shift": "peak",
+    "lastClockIn": {
+      "time": "2025-04-27T23:58:00.389Z",
+      "shift": "peak"
+    },
+    "lastClockOut": {
+      "time": "2025-04-27T08:00:48.546Z",
+      "shift": "peak"
+    },
+    "breakStart": 1745813137012,
+    "onBreak": true
+  },
+  "1359088792400564309": {
+    "model": "GENA",
+    "shift": "morning",
+    "lastClockIn": {
+      "time": "2025-04-28T07:56:12.744Z",
+      "shift": "morning"
+    },
+    "lastClockOut": {
+      "time": "2025-04-27T08:02:25.940Z",
+      "shift": "morning"
+    }
+  },
+  "1159745802210644024": {
+    "model": "GENA",
+    "shift": "peak",
+    "lastClockIn": {
+      "time": "2025-04-27T23:52:54.083Z",
+      "shift": "peak"
+    },
+    "breakStart": 1745813145084,
+    "onBreak": false,
+    "totalBreak": 24,
+    "lastClockOut": {
+      "time": "2025-04-28T08:03:10.789Z",
+      "shift": "peak"
+    }
+  },
+  "1291357436489502815": {
+    "model": "Jordan",
+    "shift": "morning",
+    "lastClockIn": {
+      "time": "2025-04-28T07:58:02.438Z",
+      "shift": "morning"
+    },
+    "breakStart": 1745755509597,
+    "onBreak": false,
+    "totalBreak": 11,
+    "lastClockOut": {
+      "time": "2025-04-27T16:00:31.448Z",
+      "shift": "morning"
+    }
+  },
+  "1362462975709020240": {
+    "model": "Emmi Pixie Carly Maile",
+    "shift": "afternoon",
+    "lastClockIn": {
+      "time": "2025-04-27T16:01:13.333Z",
+      "shift": "afternoon"
+    },
+    "breakStart": 1745785106721,
+    "onBreak": false,
+    "totalBreak": 14,
+    "lastClockOut": {
+      "time": "2025-04-28T00:03:13.377Z",
+      "shift": "afternoon"
+    }
+  }
+}

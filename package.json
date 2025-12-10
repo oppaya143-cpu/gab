@@ -1,0 +1,18 @@
+{
+  "name": "wizby~",
+  "version": "2.0.0",
+  "description": "A robust, modular clock-in/clock-out",
+  "main": "wizby.js",
+  "scripts": {
+    "start": "node wizby.js",
+    "deploy-commands": "node deploy-commands.js"
+  },
+  "author": "gab-jmmy",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.19.1",
+    "dotenv": "^16.5.0",
+    "moment-timezone": "^0.5.48",
+    "mysql2": "^3.14.1"
+  }
+}
