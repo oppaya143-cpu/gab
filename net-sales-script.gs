@@ -87,50 +87,68 @@ function _ensurePeopleListSheet() {
   return ps;
 }
 
-function _applyDoubleBorders(sheet, startRow, endRow) {
-  if (!sheet) return;
+function _applyDoubleBordersInBatches(sheet, startRow, endRow) {
+  if (!sheet || startRow > endRow) return;
+  
   try {
-    // Validate input parameters
-    if (startRow < 1 || endRow < startRow) {
-      Logger.log("_applyDoubleBorders: Invalid range - startRow: " + startRow + ", endRow: " + endRow);
-      return;
-    }
-    
     var actualEndRow = Math.min(endRow, sheet.getLastRow());
     if (actualEndRow < startRow) actualEndRow = startRow;
     
-    var fullRange = sheet.getRange(startRow, 1, actualEndRow - startRow + 1, PROCESS_COL_LIMIT);
+    // Process in smaller batches to avoid API throttling
+    var batchSize = 50;
+    var currentRow = startRow;
     
-    // Create robust border specification
-    var border = SpreadsheetApp.newBorder()
-      .setBorder(true, true, true, true, true, true, "#f08bb1", SpreadsheetApp.BorderStyle.DOUBLE)
-      .build();
+    while (currentRow <= actualEndRow) {
+      var rowsInBatch = Math.min(batchSize, actualEndRow - currentRow + 1);
+      
+      try {
+        var range = sheet.getRange(currentRow, 1, rowsInBatch, PROCESS_COL_LIMIT);
+        
+        // Apply all border types at once
+        range.setBorder(
+          true,   // top
+          true,   // left
+          true,   // bottom
+          true,   // right
+          true,   // inside horizontal
+          true,   // inside vertical
+          "#f08bb1",
+          SpreadsheetApp.BorderStyle.DOUBLE
+        );
+        
+        Logger.log("Borders applied batch: rows " + currentRow + " to " + (currentRow + rowsInBatch - 1));
+      } catch(e) {
+        Logger.log("Batch border error at rows " + currentRow + "-" + (currentRow + rowsInBatch - 1) + ": " + e);
+      }
+      
+      currentRow += rowsInBatch;
+      
+      // Small delay between batches
+      if (currentRow <= actualEndRow) {
+        Utilities.sleep(100);
+      }
+    }
     
-    // Apply with verification
-    fullRange.setBorder(border);
-    
-    Logger.log("_applyDoubleBorders: Applied DOUBLE borders #f08bb1 to rows " + startRow + " to " + actualEndRow);
-  } catch(e){
-    Logger.log("_applyDoubleBorders CRITICAL ERROR: " + e);
+  } catch(e) {
+    Logger.log("_applyDoubleBordersInBatches error: " + e);
   }
 }
 
 function _applyDoubleBordersWithRetry(sheet, startRow, endRow, maxAttempts) {
   if (!sheet) return;
   
-  maxAttempts = maxAttempts || 5;
-  var baseDelay = 150;
+  maxAttempts = maxAttempts || 3;
   
   for (var attempt = 0; attempt < maxAttempts; attempt++) {
     try {
-      Utilities.sleep(baseDelay + (attempt * 100));
-      _applyDoubleBorders(sheet, startRow, endRow);
+      Utilities.sleep(100 + (attempt * 150));
+      _applyDoubleBordersInBatches(sheet, startRow, endRow);
       Logger.log("_applyDoubleBordersWithRetry: Success on attempt " + (attempt + 1));
       return true;
-    } catch(e){
+    } catch(e) {
       Logger.log("_applyDoubleBordersWithRetry: Attempt " + (attempt + 1) + " failed - " + e);
       if (attempt === maxAttempts - 1) {
-        Logger.log("_applyDoubleBordersWithRetry: Max attempts reached");
+        Logger.log("_applyDoubleBordersWithRetry: Max attempts reached, borders may be incomplete");
         return false;
       }
     }
@@ -244,8 +262,8 @@ function _applyAllFormatting(sheet, dataStartRow, dataEndRow) {
 
   _ensureBlackFontAtoG(sheet, 2, lastRow);
   
-  // CRITICAL: Apply DOUBLE borders LAST with ROBUST RETRY LOGIC
-  _applyDoubleBordersWithRetry(sheet, 1, lastRow, 5);
+  // Apply DOUBLE borders with batching
+  _applyDoubleBordersWithRetry(sheet, 1, lastRow, 3);
 }
 
 function applyChatterValidation() {
@@ -338,8 +356,7 @@ function formatDateTimeInColumnA(sheet, startRow, endRow) {
       } catch(e){}
     }
     
-    // CRITICAL: Reapply DOUBLE borders with ROBUST RETRY LOGIC
-    _applyDoubleBordersWithRetry(sheet, startRow, endRow, 5);
+    _applyDoubleBordersWithRetry(sheet, startRow, endRow, 2);
   } catch (err) {
     Logger.log("formatDateTimeInColumnA error: " + err);
   }
@@ -377,8 +394,7 @@ function formatCurrencyColumns(sheet, startRow, endRow) {
       }
     }
     
-    // CRITICAL: Reapply DOUBLE borders with ROBUST RETRY LOGIC
-    _applyDoubleBordersWithRetry(sheet, startRow, endRow, 5);
+    _applyDoubleBordersWithRetry(sheet, startRow, endRow, 2);
   } catch (err) {
     Logger.log("formatCurrencyColumns error: " + err);
   }
@@ -544,8 +560,7 @@ function applyChatterRowColorsWithH(sheet) {
     }
   }
   
-  // CRITICAL: Reapply DOUBLE borders with ROBUST RETRY LOGIC
-  _applyDoubleBordersWithRetry(sheet, startRow, lastRow, 5);
+  _applyDoubleBordersWithRetry(sheet, startRow, lastRow, 2);
 }
 
 function _parseNetFromText(txt) {
@@ -700,9 +715,8 @@ function deleteSubscriptionRowsInF(sheet) {
     Logger.log("deleteSubscriptionRowsInF: Successfully deleted " + rowsToDelete.length + " subscription rows");
   }
   
-  // CRITICAL: Reapply DOUBLE borders with ROBUST RETRY LOGIC after deletion
   var newLastRow = sheet.getLastRow();
-  _applyDoubleBordersWithRetry(sheet, 1, newLastRow, 5);
+  _applyDoubleBordersWithRetry(sheet, 1, newLastRow, 2);
 }
 
 function extractOnlyFansUsernameFromString(s) {
@@ -916,9 +930,7 @@ function onEditCopyEtoF(e) {
       }
     }
     
-    // CRITICAL: Reapply DOUBLE borders with ROBUST RETRY LOGIC after batch writes
-    _applyDoubleBordersWithRetry(sh, 2, Math.max(2, sh.getLastRow()), 5);
-    
+    _applyDoubleBordersWithRetry(sh, 2, Math.max(2, sh.getLastRow()), 2);
     _applyAllFormatting(sh, 2, Math.max(2, sh.getLastRow()));
     deleteSubscriptionRowsInF(sh);
     applyChatterRowColorsWithH(sh);
@@ -992,8 +1004,7 @@ function syncNetSales() {
       Logger.log("syncNetSales setValues error: " + e);
     }
 
-    // CRITICAL: Reapply DOUBLE borders with ROBUST RETRY LOGIC
-    _applyDoubleBordersWithRetry(sheet, 2, sheet.getLastRow(), 5);
+    _applyDoubleBordersWithRetry(sheet, 2, sheet.getLastRow(), 2);
 
     try {
       if (cleanedAtoE.length > 0) sheet.hideColumns(3); else sheet.showColumns(3);
@@ -1107,8 +1118,7 @@ function clearNetSalesData() {
     if (lastRow > 1) {
       sheet.getRange(2,1,lastRow-1,PROCESS_COL_LIMIT).clearContent();
       
-      // CRITICAL: Reapply DOUBLE borders with ROBUST RETRY LOGIC after clear
-      _applyDoubleBordersWithRetry(sheet, 2, Math.max(2, sheet.getLastRow()), 5);
+      _applyDoubleBordersWithRetry(sheet, 2, Math.max(2, sheet.getLastRow()), 2);
       
       _applyAllFormatting(sheet,2,Math.max(2,sheet.getLastRow()));
       applyChatterRowColorsWithH(sheet);
